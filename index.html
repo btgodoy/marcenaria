@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de Crescimento para Marcenarias — Do Zero ao Cliente Ideal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0c0a;
+    --bg-soft: #1a1512;
+    --bg-card: #1f1916;
+    --line: #2a221d;
+    --text: #f1ebe4;
+    --text-soft: #b8aea4;
+    --text-mute: #7a6f64;
+    --accent: #c89968;
+    --accent-soft: #a07d52;
+    --accent-glow: rgba(200, 153, 104, 0.15);
+    --gold: #d4a572;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; line-height: 1.2; }
+
+  /* Progress bar */
+  .progress-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--line);
+    z-index: 100;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* Navigation */
+  nav.topnav {
+    position: fixed;
+    top: 3px;
+    left: 0; right: 0;
+    background: rgba(15, 12, 10, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+  }
+  .brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+  }
+  .brand span { color: var(--accent); }
+  .nav-cta {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid var(--accent);
+    padding: 8px 18px;
+    border-radius: 30px;
+    transition: all 0.3s;
+  }
+  .nav-cta:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at top, rgba(200, 153, 104, 0.08), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(160, 125, 82, 0.05), transparent 60%),
+      var(--bg);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200, 153, 104, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 153, 104, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  }
+  .hero-content { position: relative; max-width: 900px; }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 800;
+    margin-bottom: 24px;
+    background: linear-gradient(180deg, #fff 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    color: var(--text-soft);
+    max-width: 700px;
+    margin: 0 auto 48px;
+    font-weight: 300;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px var(--accent-glow);
+  }
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 50px var(--accent-glow);
+  }
+  .hero-cta svg { width: 18px; height: 18px; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-mute);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* Sections */
+  section { padding: 100px 24px; position: relative; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Overview */
+  .overview { background: var(--bg-soft); }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 60px;
+  }
+  .overview-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 40px;
+  }
+  .overview-card.problem { border-left: 3px solid #8b3a2e; }
+  .overview-card.solution { border-left: 3px solid var(--accent); }
+  .overview-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .overview-card.problem h3::before { content: '✕ '; color: #c45a4a; }
+  .overview-card.solution h3::before { content: '✓ '; color: var(--accent); }
+  .overview-card ul { list-style: none; }
+  .overview-card li {
+    padding: 8px 0;
+    color: var(--text-soft);
+    border-bottom: 1px dashed var(--line);
+  }
+  .overview-card li:last-child { border-bottom: none; }
+
+  /* Section title */
+  .section-head { text-align: center; margin-bottom: 60px; }
+  .section-head .eyebrow { margin-bottom: 16px; }
+  .section-head h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .section-head p {
+    color: var(--text-soft);
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+  }
+
+  /* Phases roadmap */
+  .roadmap { background: var(--bg); }
+  .phase {
+    margin-bottom: 80px;
+    position: relative;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .phase-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.9;
+    min-width: 90px;
+  }
+  .phase-title { flex: 1; }
+  .phase-title .label {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .phase-title h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .phase-title .goal {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+  }
+  .phase-title .goal strong { color: var(--gold); font-weight: 500; }
+
+  .steps {
+    display: grid;
+    gap: 24px;
+  }
+  .step {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 32px 36px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.4s ease;
+  }
+  .step:hover {
+    transform: translateX(4px);
+    border-color: var(--accent-soft);
+    background: linear-gradient(90deg, var(--bg-card), rgba(200, 153, 104, 0.03));
+  }
+  .step:hover::before { height: 100%; }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .step-num {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .step h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+  .step p { color: var(--text-soft); margin-bottom: 12px; }
+  .step p:last-child { margin-bottom: 0; }
+  .step .lead-in {
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .step ul {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+  }
+  .step ul li {
+    color: var(--text-soft);
+    padding: 6px 0 6px 24px;
+    position: relative;
+  }
+  .step ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 12px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .sub-block {
+    margin-top: 20px;
+    padding: 20px 24px;
+    background: var(--bg-soft);
+    border-radius: 10px;
+    border-left: 2px solid var(--accent-soft);
+  }
+  .sub-block h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .sub-block p { font-size: 0.95rem; margin-bottom: 8px; }
+  .sub-block ul li { font-size: 0.95rem; }
+
+  .funnel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .funnel-stage {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .funnel-stage .stage-label {
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .funnel-stage .stage-name {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-family: 'Playfair Display', serif;
+  }
+  .funnel-stage .stage-desc {
+    font-size: 0.85rem;
+    color: var(--text-soft);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .metric {
+    background: var(--bg-soft);
+    border-left: 2px solid var(--accent);
+    padding: 18px 22px;
+    border-radius: 8px;
+  }
+  .metric .m-name {
+    color: var(--text);
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-family: 'Playfair Display', serif;
+  }
+  .metric .m-desc {
+    color: var(--text-soft);
+    font-size: 0.9rem;
+  }
+
+  /* Result section */
+  .result {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+    text-align: center;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .result-col {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 36px;
+    text-align: left;
+    border: 1px solid var(--line);
+  }
+  .result-col h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .result-col.from h3 { color: #c45a4a; }
+  .result-col.to {
+    border-color: var(--accent-soft);
+    box-shadow: 0 0 50px var(--accent-glow);
+  }
+  .result-col.to h3 { color: var(--accent); }
+  .result-col ul { list-style: none; }
+  .result-col li {
+    padding: 10px 0;
+    color: var(--text-soft);
+    border-bottom: 1px dashed var(--line);
+  }
+  .result-col li:last-child { border-bottom: none; }
+  .arrow {
+    font-size: 2.5rem;
+    color: var(--accent);
+  }
+
+  /* Common patterns */
+  .common {
+    background: var(--bg);
+    text-align: center;
+  }
+  .common-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 50px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .common-item {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 20px;
+    transition: all 0.3s;
+  }
+  .common-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .common-item .icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 14px;
+    background: var(--accent-glow);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 20px;
+  }
+  .common-item h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Summary */
+  .summary { background: var(--bg-soft); }
+  .summary-list {
+    counter-reset: stage;
+    max-width: 800px;
+    margin: 60px auto 0;
+  }
+  .summary-item {
+    counter-increment: stage;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-item::before {
+    content: counter(stage, decimal-leading-zero);
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 60px;
+  }
+  .summary-item .s-content { flex: 1; }
+  .summary-item .s-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .summary-item .s-desc { color: var(--text-soft); font-size: 0.95rem; }
+
+  /* CTA / Conclusion */
+  .conclusion {
+    background:
+      radial-gradient(ellipse at center, rgba(200, 153, 104, 0.1), transparent 70%),
+      var(--bg);
+    text-align: center;
+  }
+  .conclusion-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-soft);
+    border-radius: 20px;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .conclusion-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 120%;
+    height: 200%;
+    background: radial-gradient(ellipse, var(--accent-glow), transparent 60%);
+    pointer-events: none;
+  }
+  .conclusion-card > * { position: relative; }
+  .conclusion h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    margin-bottom: 24px;
+  }
+  .conclusion p {
+    color: var(--text-soft);
+    margin-bottom: 16px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .key-insight {
+    margin: 36px auto;
+    padding: 24px 32px;
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    max-width: 600px;
+    text-align: left;
+  }
+  .key-insight strong { color: var(--accent); }
+
+  /* Footer */
+  footer {
+    background: var(--bg);
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    color: var(--text-mute);
+    font-size: 0.85rem;
+  }
+
+  /* Animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav.topnav { padding: 12px 20px; }
+    .brand { font-size: 15px; }
+    .nav-cta { padding: 7px 14px; font-size: 13px; }
+    section { padding: 70px 20px; }
+    .overview-grid { grid-template-columns: 1fr; gap: 20px; }
+    .overview-card { padding: 28px; }
+    .phase-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .phase-num { font-size: 3rem; min-width: auto; }
+    .step { padding: 24px; }
+    .funnel { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; gap: 24px; }
+    .arrow { transform: rotate(90deg); }
+    .summary-item { gap: 16px; padding: 20px 0; }
+    .summary-item::before { font-size: 1.8rem; min-width: 50px; }
+    .conclusion-card { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<nav class="topnav">
+  <div class="brand">Mapa de <span>Crescimento</span></div>
+  <a href="#conclusao" class="nav-cta">Começar agora</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="eyebrow">Guia Estratégico Exclusivo</div>
+    <h1>Mapa de Crescimento para Marcenarias</h1>
+    <p class="hero-sub">O passo a passo completo para transformar uma marcenaria em uma empresa <strong style="color:var(--gold)">forte, previsível e valorizada</strong> no digital — do zero ao cliente ideal.</p>
+    <a href="#visao-geral" class="hero-cta">
+      Iniciar a jornada
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="scroll-hint">Role para começar</div>
+</section>
+
+<!-- VISÃO GERAL -->
+<section class="overview" id="visao-geral">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Visão Geral</div>
+      <h2>O cenário das marcenarias hoje</h2>
+      <p>A maioria das marcenarias cresce de forma instável. O mercado mudou — e o caminho do crescimento agora exige estratégia.</p>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-card problem reveal">
+        <h3>Como a maioria cresce</h3>
+        <ul>
+          <li>Indicação</li>
+          <li>Preço</li>
+          <li>Networking</li>
+          <li>Arquitetos parceiros</li>
+        </ul>
+        <p style="margin-top:20px;color:var(--text-mute);font-style:italic;">O problema: isso limita escala.</p>
+      </div>
+
+      <div class="overview-card solution reveal">
+        <h3>O que o mercado exige</h3>
+        <ul>
+          <li>Presença digital</li>
+          <li>Autoridade</li>
+          <li>Posicionamento</li>
+          <li>Processo comercial</li>
+          <li>Dados</li>
+          <li>Previsibilidade</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:50px;color:var(--text-soft);font-size:1.1rem;" class="reveal">
+      Este mapa mostra o <strong style="color:var(--accent)">caminho completo</strong> de crescimento de uma marcenaria moderna.
+    </p>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">As 7 Fases</div>
+      <h2>O caminho do crescimento</h2>
+      <p>Cada fase desbloqueia a próxima. Siga em ordem para construir uma marcenaria sólida e escalável.</p>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">01</div>
+        <div class="phase-title">
+          <div class="label">Fase 1</div>
+          <h2>Estruturação da Marca</h2>
+          <p class="goal"><strong>Objetivo:</strong> Criar percepção profissional e aumentar confiança.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 01</span>
+            <h3>Definir Posicionamento</h3>
+          </div>
+          <p>A marcenaria precisa escolher como quer ser percebida. Esse é o ponto de partida de toda a estratégia.</p>
+          <div class="sub-block">
+            <h4>Exemplos de posicionamento</h4>
+            <ul>
+              <li>Premium</li>
+              <li>Alto padrão</li>
+              <li>Moderna</li>
+              <li>Funcional</li>
+              <li>Corporativa</li>
+              <li>Especialista em cozinhas</li>
+              <li>Especialista em móveis planejados</li>
+              <li>Especialista em ambientes compactos</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 02</span>
+            <h3>Organizar Identidade Visual</h3>
+          </div>
+          <p class="lead-in">A empresa precisa parecer organizada, confiável e moderna.</p>
+          <div class="sub-block">
+            <h4>O que ajustar</h4>
+            <ul>
+              <li>Logo</li>
+              <li>Paleta de cores</li>
+              <li>Fontes</li>
+              <li>Padrão visual</li>
+              <li>Apresentação de orçamento</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 03</span>
+            <h3>Estruturar Redes Sociais</h3>
+          </div>
+          <p class="lead-in">O Instagram precisa transmitir autoridade, qualidade e desejo.</p>
+          <div class="sub-block">
+            <h4>O perfil deve ter</h4>
+            <ul>
+              <li>Bio clara</li>
+              <li>WhatsApp fácil</li>
+              <li>Destaques organizados</li>
+              <li>Projetos reais</li>
+              <li>Depoimentos</li>
+              <li>Bastidores</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">02</div>
+        <div class="phase-title">
+          <div class="label">Fase 2</div>
+          <h2>Construção de Autoridade</h2>
+          <p class="goal"><strong>Objetivo:</strong> Fazer o cliente confiar antes mesmo do orçamento.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 04</span>
+            <h3>Produzir Conteúdo Estratégico</h3>
+          </div>
+          <p>A maioria posta apenas fotos. As que crescem produzem conteúdo de autoridade, transformação e diferenciação.</p>
+
+          <div class="sub-block">
+            <h4>Antes e Depois</h4>
+            <p>Gera impacto visual imediato.</p>
+          </div>
+          <div class="sub-block">
+            <h4>Bastidores</h4>
+            <p>Mostra produção, montagem e acabamento. Gera confiança.</p>
+          </div>
+          <div class="sub-block">
+            <h4>Conteúdo Educativo</h4>
+            <ul>
+              <li>MDF x compensado</li>
+              <li>Ferragens</li>
+              <li>Erros em móveis planejados</li>
+              <li>Tendências</li>
+            </ul>
+          </div>
+          <div class="sub-block">
+            <h4>Lifestyle</h4>
+            <p>Mostrar ambientes bonitos. O cliente compra sensação, estética e status.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 05</span>
+            <h3>Criar Prova Social</h3>
+          </div>
+          <p>Poucas marcenarias exploram isso bem — e é um dos maiores geradores de confiança que existem.</p>
+          <div class="sub-block">
+            <h4>O que mostrar</h4>
+            <ul>
+              <li>Depoimentos</li>
+              <li>Vídeos de clientes</li>
+              <li>Ambientes entregues</li>
+              <li>Avaliações do Google</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">03</div>
+        <div class="phase-title">
+          <div class="label">Fase 3</div>
+          <h2>Captação de Clientes</h2>
+          <p class="goal"><strong>Objetivo:</strong> Gerar fluxo previsível de oportunidades.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 06</span>
+            <h3>Estruturar Google Meu Negócio</h3>
+          </div>
+          <p>Extremamente importante — é onde clientes locais encontram sua marcenaria primeiro.</p>
+          <div class="sub-block">
+            <h4>O que precisa ter</h4>
+            <ul>
+              <li>Fotos profissionais</li>
+              <li>Avaliações</li>
+              <li>Localização</li>
+              <li>Descrição otimizada</li>
+              <li>Atualizações constantes</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 07</span>
+            <h3>Google Ads</h3>
+          </div>
+          <p class="lead-in">Aqui entram clientes quentes — pessoas procurando ativamente por orçamento.</p>
+          <div class="sub-block">
+            <h4>Exemplos de campanhas</h4>
+            <ul>
+              <li>Móveis planejados + cidade</li>
+              <li>Cozinha planejada</li>
+              <li>Closet planejado</li>
+              <li>Marcenaria sob medida</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 08</span>
+            <h3>Instagram / Facebook Ads</h3>
+          </div>
+          <p class="lead-in">Objetivo: gerar desejo, reconhecimento e autoridade.</p>
+
+          <div class="sub-block">
+            <h4>Campanhas ideais</h4>
+            <ul>
+              <li>Vídeos curtos</li>
+              <li>Antes e depois</li>
+              <li>Transformação</li>
+              <li>Ambientes sofisticados</li>
+            </ul>
+          </div>
+
+          <h4 style="font-family:'Inter';font-size:0.95rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin:24px 0 12px;font-weight:600;">A estratégia correta</h4>
+          <div class="funnel">
+            <div class="funnel-stage">
+              <div class="stage-label">Topo</div>
+              <div class="stage-name">Alcance</div>
+              <div class="stage-desc">Atingir novas pessoas</div>
+            </div>
+            <div class="funnel-stage">
+              <div class="stage-label">Meio</div>
+              <div class="stage-name">Autoridade</div>
+              <div class="stage-desc">Construir confiança</div>
+            </div>
+            <div class="funnel-stage">
+              <div class="stage-label">Fundo</div>
+              <div class="stage-name">Conversão</div>
+              <div class="stage-desc">Fechar via WhatsApp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">04</div>
+        <div class="phase-title">
+          <div class="label">Fase 4</div>
+          <h2>Melhoria Comercial</h2>
+          <p class="goal"><strong>Objetivo:</strong> Transformar mais orçamentos em vendas.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 09</span>
+            <h3>Melhorar Atendimento</h3>
+          </div>
+          <p class="lead-in">O lead precisa sentir velocidade, organização e confiança.</p>
+          <div class="sub-block">
+            <h4>Grandes erros</h4>
+            <ul>
+              <li>Demora</li>
+              <li>Respostas secas</li>
+              <li>Falta de processo</li>
+            </ul>
+          </div>
+          <div class="sub-block">
+            <h4>O ideal</h4>
+            <ul>
+              <li>Responder rápido</li>
+              <li>Entender a necessidade</li>
+              <li>Criar conexão</li>
+              <li>Mostrar diferenciais</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 10</span>
+            <h3>Estruturar Follow-up</h3>
+          </div>
+          <p>A maioria perde orçamento porque não acompanha, não retorna, esquece o lead.</p>
+          <div class="sub-block">
+            <h4>O correto</h4>
+            <ul>
+              <li>Acompanhamento</li>
+              <li>Lembrete</li>
+              <li>Retomada</li>
+              <li>Relacionamento</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 11</span>
+            <h3>Melhorar Apresentação de Orçamento</h3>
+          </div>
+          <p class="lead-in">O cliente não compra apenas preço — ele compra percepção, segurança, acabamento e experiência.</p>
+          <div class="sub-block">
+            <h4>Um orçamento forte precisa</h4>
+            <ul>
+              <li>Organização</li>
+              <li>Apresentação visual</li>
+              <li>Diferenciais</li>
+              <li>Imagens</li>
+              <li>Explicação</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 5 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">05</div>
+        <div class="phase-title">
+          <div class="label">Fase 5</div>
+          <h2>Gestão por Dados</h2>
+          <p class="goal"><strong>Objetivo:</strong> Tomar decisões inteligentes.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 12</span>
+            <h3>Monitorar Métricas</h3>
+          </div>
+          <p>A maioria das marcenarias não acompanha números. Isso trava o crescimento.</p>
+          <div class="metrics-grid">
+            <div class="metric">
+              <div class="m-name">Leads por mês</div>
+              <div class="m-desc">Quantos contatos entram</div>
+            </div>
+            <div class="metric">
+              <div class="m-name">Custo por lead</div>
+              <div class="m-desc">Quanto custa gerar oportunidade</div>
+            </div>
+            <div class="metric">
+              <div class="m-name">Taxa de conversão</div>
+              <div class="m-desc">Quantos orçamentos viram venda</div>
+            </div>
+            <div class="metric">
+              <div class="m-name">Ticket médio</div>
+              <div class="m-desc">Quanto cada projeto gera</div>
+            </div>
+            <div class="metric">
+              <div class="m-name">ROI</div>
+              <div class="m-desc">Quanto voltou da mídia</div>
+            </div>
+            <div class="metric">
+              <div class="m-name">Tempo de resposta</div>
+              <div class="m-desc">Quanto demora para responder</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 13</span>
+            <h3>Descobrir os Serviços Mais Lucrativos</h3>
+          </div>
+          <p>Nem sempre o serviço que mais vende é o mais lucrativo.</p>
+          <div class="sub-block">
+            <h4>Descobrir</h4>
+            <ul>
+              <li>Quais projetos geram mais lucro</li>
+              <li>Quais clientes fecham mais rápido</li>
+              <li>Quais campanhas trazem melhores leads</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 6 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">06</div>
+        <div class="phase-title">
+          <div class="label">Fase 6</div>
+          <h2>Escala</h2>
+          <p class="goal"><strong>Objetivo:</strong> Transformar a marcenaria em uma marca forte.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 14</span>
+            <h3>Criar Autoridade Regional</h3>
+          </div>
+          <p class="lead-in">A empresa precisa virar referência na região.</p>
+          <div class="sub-block">
+            <h4>Como</h4>
+            <ul>
+              <li>Conteúdo constante</li>
+              <li>Anúncios</li>
+              <li>Presença forte</li>
+              <li>Branding</li>
+              <li>Vídeos profissionais</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 15</span>
+            <h3>Criar Diferenciação</h3>
+          </div>
+          <p>A maioria compete por preço. As fortes competem por experiência, estética, confiança e especialização.</p>
+          <div class="sub-block">
+            <h4>Diferenciais fortes</h4>
+            <ul>
+              <li>Prazo</li>
+              <li>Acabamento</li>
+              <li>Projeto 3D</li>
+              <li>Atendimento</li>
+              <li>Organização</li>
+              <li>Pós-venda</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 16</span>
+            <h3>Criar Previsibilidade</h3>
+          </div>
+          <p class="lead-in">Aqui a empresa deixa de depender de indicação, de sorte ou de mês bom.</p>
+          <div class="sub-block">
+            <h4>O crescimento começa a ser previsível através de</h4>
+            <ul>
+              <li>Tráfego pago</li>
+              <li>Conteúdo</li>
+              <li>Funil</li>
+              <li>CRM</li>
+              <li>Dados</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 7 -->
+    <div class="phase reveal">
+      <div class="phase-header">
+        <div class="phase-num">07</div>
+        <div class="phase-title">
+          <div class="label">Fase 7</div>
+          <h2>Marca Premium</h2>
+          <p class="goal"><strong>Objetivo:</strong> Cobrar mais e atrair clientes melhores.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 17</span>
+            <h3>Elevar Percepção da Marca</h3>
+          </div>
+          <p>O digital influencia MUITO no fechamento. Mesmo com serviço bom, perfil amador gera desconfiança.</p>
+          <div class="sub-block">
+            <h4>Marca premium transmite</h4>
+            <ul>
+              <li>Sofisticação</li>
+              <li>Organização</li>
+              <li>Exclusividade</li>
+              <li>Autoridade</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 18</span>
+            <h3>Aumentar Ticket Médio</h3>
+          </div>
+          <p class="lead-in">Quando a percepção sobe:</p>
+          <ul>
+            <li>O cliente discute menos preço</li>
+            <li>Valoriza mais qualidade</li>
+            <li>Aceita tickets maiores</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-num">Passo 19</span>
+            <h3>Criar Ecossistema de Crescimento</h3>
+          </div>
+          <p class="lead-in">A marcenaria forte possui uma estrutura completa:</p>
+          <div class="sub-block">
+            <h4>Estrutura</h4>
+            <ul>
+              <li>Marketing</li>
+              <li>Conteúdo</li>
+              <li>Mídia</li>
+              <li>CRM</li>
+              <li>Comercial</li>
+              <li>Métricas</li>
+              <li>Branding</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESULTADO -->
+<section class="result">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Resultado Final</div>
+      <h2>A transformação completa</h2>
+      <p>O destino de quem segue este mapa do início ao fim.</p>
+    </div>
+
+    <div class="result-grid reveal">
+      <div class="result-col from">
+        <h3>A empresa sai de</h3>
+        <ul>
+          <li>Indicação</li>
+          <li>Instabilidade</li>
+          <li>Guerra de preço</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="result-col to">
+        <h3>E vai para</h3>
+        <ul>
+          <li>Previsibilidade</li>
+          <li>Autoridade</li>
+          <li>Crescimento escalável</li>
+          <li>Clientes qualificados</li>
+          <li>Marca valorizada</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE TÊM EM COMUM -->
+<section class="common">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">O Padrão dos Vencedores</div>
+      <h2>O que as marcenarias que mais crescem têm em comum</h2>
+    </div>
+
+    <div class="common-grid reveal">
+      <div class="common-item">
+        <div class="icon">◆</div>
+        <h4>Aparecem constantemente</h4>
+      </div>
+      <div class="common-item">
+        <div class="icon">★</div>
+        <h4>Investem em percepção</h4>
+      </div>
+      <div class="common-item">
+        <div class="icon">▲</div>
+        <h4>Usam dados</h4>
+      </div>
+      <div class="common-item">
+        <div class="icon">●</div>
+        <h4>Possuem processo</h4>
+      </div>
+      <div class="common-item">
+        <div class="icon">♦</div>
+        <h4>Criam desejo</h4>
+      </div>
+      <div class="common-item">
+        <div class="icon">✦</div>
+        <h4>Dominam o digital</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESUMO -->
+<section class="summary">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Resumo do Mapa</div>
+      <h2>Sua jornada em 7 etapas</h2>
+      <p>O caminho condensado — pronto para guiar suas decisões diárias.</p>
+    </div>
+
+    <div class="summary-list reveal">
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Posicionamento</div>
+          <div class="s-desc">Definir marca e percepção.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Autoridade</div>
+          <div class="s-desc">Criar conteúdo e confiança.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Captação</div>
+          <div class="s-desc">Gerar leads previsíveis.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Comercial</div>
+          <div class="s-desc">Converter mais orçamentos.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Dados</div>
+          <div class="s-desc">Tomar decisões inteligentes.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Escala</div>
+          <div class="s-desc">Dominar a região.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="s-content">
+          <div class="s-title">Marca Premium</div>
+          <div class="s-desc">Cobrar mais e crescer com consistência.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSÃO -->
+<section class="conclusion" id="conclusao">
+  <div class="container">
+    <div class="conclusion-card reveal">
+      <div class="eyebrow">Conclusão</div>
+      <h2>O momento é agora</h2>
+      <p>Hoje, uma marcenaria cresce muito mais rápido quando entende marketing, investe em posicionamento, acompanha dados, cria autoridade e profissionaliza o atendimento.</p>
+
+      <div class="key-insight">
+        O mercado ainda possui <strong>baixa maturidade digital</strong>. Isso significa: <strong>quem estruturar isso primeiro tende a dominar espaço rapidamente.</strong>
+      </div>
+
+      <p style="margin-top:32px;">Você acabou de receber o mapa completo. O próximo passo é executar — uma fase de cada vez.</p>
+
+      <a href="#" class="hero-cta" style="margin-top:32px;">
+        Comece pela Fase 1
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Mapa de Crescimento para Marcenarias · Do Zero ao Cliente Ideal
+</footer>
+
+<script>
+  // Progress bar
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
